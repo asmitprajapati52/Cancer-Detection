@@ -1,0 +1,96 @@
+import React, { useState } from 'react'; // 1. useState import kiya inputs ke liye
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
+
+const Login = () => {
+  const { Login: loginContext } = useAuth(); // Context function ko alias de diya taaki component ke naam se takraye na
+  const navigate = useNavigate();
+
+  // 3. Inputs ke liye states banayi
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // 4. Dummy user object (Semicolon hatakar comma lagaya)
+    const dummyUser = {
+      name: "Asmit Prajapati",
+      email: email,
+      role: "developer"
+    };
+
+    // Context ke dabbe me data daala aur teleport kiya
+    loginContext(dummyUser);
+    navigate("/dashboard", { replace: true });
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 font-mono">
+      {/* Dynamic Background Blur Effect */}
+      <div className="absolute w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl top-1/4 left-1/4 animate-pulse"></div>
+      <div className="absolute w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl bottom-1/4 right-1/4 animate-pulse"></div>
+
+      {/* Glassmorphic Login Card */}
+      <div className="w-full max-w-md bg-slate-900/40 border border-slate-800/80 p-8 rounded-2xl shadow-2xl backdrop-blur-md relative z-10">
+        
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 mb-2">
+            <div className="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></div>
+            <span className="text-xs tracking-widest text-emerald-400 uppercase font-bold">Secure Portal</span>
+          </div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-100 to-slate-400 bg-clip-text text-transparent">
+            Welcome Back
+          </h2>
+          <p className="text-xs text-slate-500 mt-1">Enter credentials to access Skin Cancer Detection</p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          
+          {/* Email Input */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Email Address
+            </label>
+            <input 
+              type="email" 
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+            />
+          </div>
+
+          {/* Password Input */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              Password
+            </label>
+            <input 
+              type="password" 
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button 
+            type="submit"
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm tracking-wider uppercase transition-all duration-200 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
+          >
+            Sign In
+          </button>
+
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default Login;

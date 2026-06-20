@@ -1,0 +1,15 @@
+# Ignore Node dependencies
+node_modules/
+dist/
+build/
+
+# Ignore Python Virtual Environments
+Backend/venv/
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+
+# Ignore Environment Variables
+.env
