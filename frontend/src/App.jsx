@@ -8,6 +8,7 @@ import Navbar from './components/common/Navbar';
 import Sidebar from './components/common/Sidebar';
 import { AuthProvider } from './context/AuthContext';
 import { ScanProvider } from './context/ScanContext';
+import ProtectedRoute from './ProtectedRoute';
 
 const AppLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -45,8 +46,16 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Navigate to='/dashboard' replace />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/dashboard' element={<AppLayout><Dashboard /></AppLayout>} />
-        <Route path='/scanmole' element={<AppLayout><ScanMole /></AppLayout>} />
+        <Route path='/dashboard' element={
+          <ProtectedRoute>
+            <AppLayout><Dashboard /></AppLayout>
+          </ProtectedRoute>
+          }/>
+        <Route path='/scanmole' element={
+          <ProtectedRoute>
+            <AppLayout><ScanMole /></AppLayout>
+          </ProtectedRoute>
+          }/>
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     </div>
