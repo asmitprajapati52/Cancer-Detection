@@ -24,7 +24,7 @@ app.post('/api/auth/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         user = new User({ email, password: hashedPassword, name });
-        await user.save();
+        await user.save(); // mongodb mai user save kr diya
 
         res.status(201).json({ message: 'user successful created!' });
     } catch (err) {
@@ -37,10 +37,10 @@ app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'User nahi mila! Pehle register karo.' });
+        if (!user) return res.status(400).json({ message: 'User nahi mila! Pehle register karo.' }); // jab user galat hota hai
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Galat password hai bhai!' });
+        if (!isMatch) return res.status(400).json({ message: 'Galat password hai bhai!' }); // jab pasword galat hota hai
 
         // 'id' ki jagah '1d' (1 day) kiya taaki JWT crash na kare
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
