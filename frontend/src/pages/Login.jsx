@@ -9,20 +9,40 @@ const Login = () => {
   // 3. Inputs ke liye states banayi
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 4. Dummy user object (Semicolon hatakar comma lagaya)
-    const dummyUser = {
-      name: "Asmit Prajapati",
-      email: email,
-      role: "developer"
-    };
+    setError('');
+    setLoading(true);
 
-    // Context ke dabbe me data daala aur teleport kiya
-    loginContext(dummyUser);
-    navigate("/dashboard", { replace: true });
+    try{
+      const response= await fetch('http://localhost:5000/api/auth/login',{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data=await response.json();
+
+      if(!response.ok){
+        throw new Error(data.message || 'Login failed!');
+      }
+
+      localStorage.setItem('token',data.token);
+      localStorage.setItem('user',JSON.stringify(data.user));
+
+      loginContext(data.user);
+      navigate("/dashboard", { replace: true });
+    }catch(err){
+      setError(err.message);
+    }finally{
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,7 +104,7 @@ const Login = () => {
             type="submit"
             className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm tracking-wider uppercase transition-all duration-200 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
           >
-            Sign In
+            {loading ? 'Verifying Neural Logs...' : 'Access Terminal'}
           </button>
 
         </form>
