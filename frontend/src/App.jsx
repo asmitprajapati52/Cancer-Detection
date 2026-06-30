@@ -9,6 +9,7 @@ import Sidebar from './components/common/Sidebar';
 import { AuthProvider } from './context/AuthContext';
 import { ScanProvider } from './context/ScanContext';
 import ProtectedRoute from './ProtectedRoute';
+import Register from './pages/Register';
 
 const AppLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -46,6 +47,8 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Navigate to='/dashboard' replace />} />
         <Route path='/login' element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
         <Route path='/dashboard' element={
           <ProtectedRoute>
             <AppLayout><Dashboard /></AppLayout>

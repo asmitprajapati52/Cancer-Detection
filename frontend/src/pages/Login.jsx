@@ -1,12 +1,12 @@
-import React, { useState } from 'react'; // 1. useState import kiya inputs ke liye
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'; 
+import { useNavigate, Link } from 'react-router-dom'; // 🚀 Link import kar liya hai
 import useAuth from '../hooks/useAuth';
 
 const Login = () => {
-  const { Login: loginContext } = useAuth(); // Context function ko alias de diya taaki component ke naam se takraye na
+  const { Login: loginContext } = useAuth(); 
   const navigate = useNavigate();
 
-  // 3. Inputs ke liye states banayi
+  // Inputs ke liye states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,33 +14,32 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError('');
     setLoading(true);
 
-    try{
-      const response= await fetch('http://localhost:5000/api/auth/login',{
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
-        headers:{
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
 
-      const data=await response.json();
+      const data = await response.json();
 
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error(data.message || 'Login failed!');
       }
 
-      localStorage.setItem('token',data.token);
-      localStorage.setItem('user',JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
       loginContext(data.user);
       navigate("/dashboard", { replace: true });
-    }catch(err){
+    } catch (err) {
       setError(err.message);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -65,6 +64,13 @@ const Login = () => {
           </h2>
           <p className="text-xs text-slate-500 mt-1">Enter credentials to access Skin Cancer Detection</p>
         </div>
+
+        {/* Error Alert Box */}
+        {error && (
+          <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 p-3 rounded-xl text-xs mb-4 text-center">
+            ⚠️ {error}
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -102,15 +108,22 @@ const Login = () => {
           {/* Submit Button */}
           <button 
             type="submit"
-            className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm tracking-wider uppercase transition-all duration-200 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
+            disabled={loading}
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm tracking-wider uppercase transition-all duration-200 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-[0.98] cursor-pointer disabled:bg-emerald-800"
           >
             {loading ? 'Verifying Neural Logs...' : 'Access Terminal'}
           </button>
 
         </form>
+
+        {/* 🎯 Teri Create Account Link yahan set ho gayi hai card ke andar */}
+        <p className="text-center text-xs text-slate-500 mt-6">
+          New here? <Link to="/register" className="text-emerald-400 hover:underline">Create Account</Link>
+        </p>
+
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
