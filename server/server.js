@@ -1,11 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const path = require('path'); // 🚀 Path require kiya static serving ke liye
 
 const connectDB = require('./config/db');
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+// 🚀 Scan routes ko import karo
+const scanRoutes = require('./routes/scan'); 
 
 const app = express();
 
@@ -15,7 +19,13 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// 🚀 REGISTER ROUTE (Fixed path, fixed req/res order)
+// 🖼️ Static Middleware: Taaki frontend uploaded images ko browse/dekh sake
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// 🔌 Scan endpoints ko link karo
+app.use('/api/scan', scanRoutes); 
+
+// 🚀 REGISTER ROUTE 
 app.post('/api/auth/register', async (req, res) => {
     try {
         const { email, password, name } = req.body;
@@ -24,7 +34,7 @@ app.post('/api/auth/register', async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         user = new User({ email, password: hashedPassword, name });
-        await user.save(); // mongodb mai user save kr diya
+        await user.save(); 
 
         res.status(201).json({ message: 'user successful created!' });
     } catch (err) {
@@ -32,18 +42,17 @@ app.post('/api/auth/register', async (req, res) => {
     }
 });
 
-// 🔑 LOGIN ROUTE (Fixed JWT expiresIn time to '1d')
+// 🔑 LOGIN ROUTE
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'User nahi mila! Pehle register karo.' }); // jab user galat hota hai
+        if (!user) return res.status(400).json({ message: 'User nahi mila! Pehle register karo.' }); 
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Galat password hai bhai!' }); // jab pasword galat hota hai
+        if (!isMatch) return res.status(400).json({ message: 'Galat password hai bhai!' }); 
 
-        // 'id' ki jagah '1d' (1 day) kiya taaki JWT crash na kare
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'your_jwt_secret_key', { expiresIn: '1d' });
 
         res.json({
             token,
