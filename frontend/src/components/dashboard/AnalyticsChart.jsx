@@ -68,7 +68,7 @@ const AnalyticsChart = () => {
           {/* isAnimationActive={false} kiya h taki live shifting ke time wave jhatke na mare, balki smoothly move ho */}
           <AreaChart data={liveData} margin={{ top: 10, right: 5, left: -30, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" opacity={0.15} />
-            <XAxis dataKey="name" stroke="#64748b" font-size={10} tickLine={false} />
+            <XAxis dataKey="name" stroke="#64748b" fontSize={10} tickLine={false} />
             <YAxis stroke="#64748b" fontSize={10} tickLine={false} domain={[0, 12]} />
             
             <Tooltip 

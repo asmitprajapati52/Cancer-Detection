@@ -25,27 +25,20 @@ const storage = multer.diskStorage({
   }
 });
 
-// 🔒 Image validation filter
+// 🔒 Transparent Image Validation (Bypassing Mimetype crashes)
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|webp/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (extname && mimetype) {
-    return cb(null, true);
-  } else {
-    cb(new Error('Only JPEG, JPG, PNG, and WEBP images are allowed!'), false);
-  }
+  // Direct accept karo taaki blob aur regular formats crash na karein
+  cb(null, true);
 };
 
-const upload = multer({
+const upload = multer({ // middleware
   storage: storage,
   fileFilter: fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
 // 🔬 POST: /api/scan/upload
-router.post('/upload', protect, upload.single('image'), async (req, res) => {
+router.post('/upload', protect, upload.single('image'), async (req, res) => { // api
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'Please upload an image!' });

@@ -7,7 +7,7 @@ const protect=async(req,res,next)=>{
         try{
             token=req.headers.authorization.split(' ')[1];
 
-            const decoded=jwt.verify(token, process.env.JWT_SECRET || || 'your_jwt_secret_key');
+            const decoded=jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_key');
 
             req.user={_id:decoded.id};
             next();
@@ -22,3 +22,4 @@ const protect=async(req,res,next)=>{
 }
 
 module.exports={protect};
+
