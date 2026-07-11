@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# frontend/.gitignore ke andar add karo:
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

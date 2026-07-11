@@ -5,7 +5,7 @@ const ImageUploader = ({ onImageSelect }) => {
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleFile = (file) => {
+  const handleFile = (file) => { // check if image is valid or not
     if (file && file.type.startsWith('image/')) {
       setPreview(URL.createObjectURL(file));
       onImageSelect(file);
@@ -14,14 +14,14 @@ const ImageUploader = ({ onImageSelect }) => {
     }
   };
 
-  const handleDrag = (e) => {
+  const handleDrag = (e) => { // image ko pakdega
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
     else if (e.type === "dragleave") setDragActive(false);
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e) => { // image ko drop karega
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
