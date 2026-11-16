@@ -2,9 +2,9 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
-const dns = require('dns'); // ✅ Add this
+const dns = require('dns');
 
-// ✅ Force Node to use Google DNS instead of 127.0.0.1
+// Force Node to use Google DNS instead of 127.0.0.1
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const connectDB = require('./config/db');
@@ -12,7 +12,7 @@ const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// 🚀 Scan routes
+// Scan routes
 const scanRoutes = require('./routes/scan');
 
 const app = express();
@@ -25,6 +25,14 @@ app.use(express.json());
 
 // Static folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ✅ Root health-check route (fixes "Cannot GET /")
+app.get('/', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        message: 'Cancer Detection API is running 🚀'
+    });
+});
 
 // Routes
 app.use('/api/scan', scanRoutes);
