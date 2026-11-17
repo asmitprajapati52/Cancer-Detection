@@ -98,7 +98,7 @@ FASTAPI_URL=[http://127.0.0.1:8000](http://127.0.0.1:8000)
 Create a .env file inside the frontend/ directory (you can copy .env.example):
 
 Code snippet
-VITE_API_BASE_URL=http://localhost:5000/api
+VITE_API_BASE_URL=https://cancer-detection-q383.onrender.com/api
 📦 Installation & Local Execution
 Follow these steps to run all three services concurrently:
 
@@ -123,7 +123,7 @@ Bash
 cd server
 npm install
 npm run dev
-Express Server will start on http://localhost:5000
+Express Server will start on hhttps://cancer-detection-q383.onrender.com
 
 Step 3: Start the React Frontend
 Open a third terminal window:

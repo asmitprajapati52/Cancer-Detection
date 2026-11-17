@@ -40,7 +40,7 @@ const ScanMole = () => {
           date: new Date(createdAt).toLocaleDateString(),
           disease: prediction, // Real detection text from h5 model
           confidence: `${Number(confidence).toFixed(1)}%`, // Formatting numbers smoothly
-          image: `http://localhost:5000${imageUrl}` // Backend local address check static serve
+          image: `https://cancer-detection-q383.onrender.com${imageUrl}` // Backend local address check static serve
         };
 
         setResult(scanData);
